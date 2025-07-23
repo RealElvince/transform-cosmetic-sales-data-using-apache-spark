@@ -12,6 +12,7 @@ def ingest_data(file_path):
         .load(file_path)
     sales_data.show(10)
     
+    sales_data.printSchema()
 if __name__ == "__main__":
-    file_path = os.path.join("data","sales_data.csv")
+    file_path = os.path.join("data","raw","sales_data.csv")
     ingest_data(file_path)
