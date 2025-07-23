@@ -1,5 +1,7 @@
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder\
-     .appName("CosmeticSalesApp")\
-     .getOrCreate()
+
+def create_spark_session(app_name="CosmeticSalesApp"):
+     spark = SparkSession.builder\
+         .appName(app_name)\
+         .getOrCreate()
