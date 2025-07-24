@@ -20,15 +20,24 @@ def tranform_sales_data(df):
         round(col("Amount") / col("Boxes_Shipped"), 2)
     )
 
-    return revenue_per_box
 
+    # total_revenue per country
+    total_revenue = df.groupBy("Country")\
+           .sum("Amount")\
+           .withColumnRenamed("sum(Amount)", "Total_Revenue")\
+           .orderBy("Total_Revenue")
+
+    return revenue_per_box, total_revenue
 
 if __name__ == "__main__":
     file_path = os.path.join(
         "data","raw","sales_data.csv"
     )
+
+    # Ingest the data
     df = ingest_data(file_path)
-    revenue_per_box = tranform_sales_data(df)
-    revenue_per_box.show(5)
+    revenue_per_box, total_revenue = tranform_sales_data(df)
+    revenue_per_box.show()
+    total_revenue.show()
 
     
