@@ -14,13 +14,11 @@ def tranform_sales_data(df):
 
     # Calculate Revenue Per Box
 
-    revenue_per_box = df.select("Country")\
+    revenue_per_box = df.select("Country", "Amount", "Boxes_Shipped")\
     .withColumn(
         "Revenue_Per_Box",
         round(col("Amount") / col("Boxes_Shipped"), 2)
-    )\
-    .groupBy("Revenue_Per_Box")\
-    .orderBy("Revenue_Per_Box", ascending=False)
+    )
 
     return revenue_per_box
 
