@@ -10,7 +10,7 @@ def ingest_data(file_path):
         .option("header", "true") \
         .schema(schema) \
         .load(file_path)
-    sales_data.show(10)
+    return sales_data
     
     sales_data.printSchema()
 if __name__ == "__main__":
