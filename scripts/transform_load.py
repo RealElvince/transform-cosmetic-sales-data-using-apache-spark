@@ -25,6 +25,7 @@ def tranform_sales_data(df):
     total_revenue_per_country = df.groupBy("Country")\
            .sum("Amount")\
            .withColumnRenamed("sum(Amount)", "Total_Revenue")\
+           .withColumn("Total_Revenue", round(col("Total_Revenue"), 2))\
            .orderBy("Total_Revenue")
 
     # total revenue
@@ -34,11 +35,16 @@ def tranform_sales_data(df):
     
     # number of boxes shipped
     total_boxes_shipped = df.agg({"Boxes_Shipped": "sum"})\
-        .withColumnRenamed("sum(Boxes_Shipped)", "Total_Boxes_Shipped")\
-        .withColumn("Total_Boxes_Shipped", round(col("Total_Boxes_Shipped"), 2))
+        .withColumnRenamed("sum(Boxes_Shipped)", "Total_Boxes_Shipped")
+    
 
-
-    return revenue_per_box, total_revenue_per_country, total_revenue, total_boxes_shipped
+    # number of sales person
+    total_sales_person = df.agg({"Sales_Person": "count"})\
+        .withColumnRenamed("count(Sales_Person)", "Total_Sales_Persons")\
+        .withColumn("Total_Sales_Persons", round(col("Total_Sales_Persons"), 2))
+    
+    # Return all the transformed dataframes
+    return revenue_per_box, total_revenue_per_country, total_revenue, total_boxes_shipped, total_sales_person
 
 if __name__ == "__main__":
     file_path = os.path.join(
