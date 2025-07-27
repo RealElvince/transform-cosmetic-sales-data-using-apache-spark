@@ -29,10 +29,16 @@ def tranform_sales_data(df):
 
     # total revenue
     total_revenue = df.agg({"Amount": "sum"})\
-        .withColumnRenamed("sum(Amount)", "Total_Revenue")
+        .withColumnRenamed("sum(Amount)", "Total_Revenue")\
+        .withColumn("Total_Revenue", round(col("Total_Revenue"), 2))
+    
+    # number of boxes shipped
+    total_boxes_shipped = df.agg({"Boxes_Shipped": "sum"})\
+        .withColumnRenamed("sum(Boxes_Shipped)", "Total_Boxes_Shipped")\
+        .withColumn("Total_Boxes_Shipped", round(col("Total_Boxes_Shipped"), 2))
 
 
-    return revenue_per_box, total_revenue_per_country, total_revenue
+    return revenue_per_box, total_revenue_per_country, total_revenue, total_boxes_shipped
 
 if __name__ == "__main__":
     file_path = os.path.join(
@@ -41,7 +47,8 @@ if __name__ == "__main__":
 
     # Ingest the data
     df = ingest_data(file_path)
-    revenue_per_box, total_revenue_per_country, total_revenue = tranform_sales_data(df)
+    revenue_per_box, total_revenue_per_country, total_revenue, total_boxes_shipped = tranform_sales_data(df)
     revenue_per_box.show()
     total_revenue_per_country.show()
     total_revenue.show()
+    total_boxes_shipped.show()
