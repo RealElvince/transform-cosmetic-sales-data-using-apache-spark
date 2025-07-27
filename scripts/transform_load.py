@@ -44,6 +44,12 @@ def tranform_sales_data(df):
     # Return all the transformed dataframes
     return revenue_per_box, total_revenue_per_country, total_revenue, total_boxes_shipped, total_sales_person
 
+
+# save the transformed dataframes to csv files
+def save_transformed_dataframes(df, filename):
+    output_path = os.path.join("data", "transforms", filename)
+    df.coalesce(1).write.mode("overwrite").csv(output_path, header=True)
+
 if __name__ == "__main__":
     file_path = os.path.join(
         "data","raw","sales_data.csv"
@@ -51,7 +57,19 @@ if __name__ == "__main__":
 
     # Ingest the data
     df = ingest_data(file_path)
+    # Transform the data
     revenue_per_box, total_revenue_per_country, total_revenue, total_boxes_shipped ,total_sales_person = tranform_sales_data(df)
+    
+
+    # Save the transformed dataframes
+    save_transformed_dataframes(revenue_per_box, "revenue_per_box")
+    save_transformed_dataframes(total_revenue_per_country, "total_revenue_per_country")
+    save_transformed_dataframes(total_revenue, "total_revenue")
+    save_transformed_dataframes(total_boxes_shipped, "total_boxes_shipped")
+    save_transformed_dataframes(total_sales_person, "total_sales_person")
+
+
+    # tranforms view in console
     revenue_per_box.show()
     total_revenue_per_country.show()
     total_revenue.show()
